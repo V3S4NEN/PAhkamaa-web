@@ -440,33 +440,27 @@
 
 
 <script>
-  function reportHeight() {
-    var h = document.documentElement.scrollHeight;
+  function fitHeight() {
+    var h = document.querySelector('.hero').offsetHeight;
+    document.documentElement.style.height = h + 'px';
+    document.body.style.height = h + 'px';
     window.parent.postMessage(JSON.stringify({
       type: "iframe-height",
       height: h
     }), "*");
-    // Also try Wix's own method
-    if (window.Wix) {
-      window.Wix.setHeight(h);
-    }
+    if (window.Wix) window.Wix.setHeight(h);
   }
 
-  // Run on load
   window.addEventListener('load', function() {
-    reportHeight();
-    setTimeout(reportHeight, 300);
-    setTimeout(reportHeight, 800);
-    setTimeout(reportHeight, 1500);
+    setTimeout(fitHeight, 100);
+    setTimeout(fitHeight, 500);
+    setTimeout(fitHeight, 1500);
   });
 
-  // Run on resize
-  window.addEventListener('resize', reportHeight);
+  window.addEventListener('resize', fitHeight);
 
-  // Watch for any DOM changes
   if (window.ResizeObserver) {
-    var ro = new ResizeObserver(reportHeight);
-    ro.observe(document.body);
+    new ResizeObserver(fitHeight).observe(document.querySelector('.hero'));
   }
 </script>
 
